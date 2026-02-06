@@ -1,0 +1,9 @@
+### Create contact message
+POST http://localhost:3001/api/contact
+Content-Type: application/json
+
+{
+  "name": "Samul1",
+  "email": "Samul1@example.com",
+  "message": "Testi viesti REST Clientistä"
+}
