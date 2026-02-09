@@ -6,6 +6,7 @@ import { NAV, PROJECTS, slugify } from "../services/siteData";
 // ============================================================
 // ===== HEADER / NAV (DATA-DRIVEN) =====
 // - Dropdown-itemit generoidaan PROJECTS arraysta
+// - Dropdown-labelit EI navigoi minnekään (vain itemit navigoi)
 // ============================================================
 
 function NavItem({ to, label }) {
@@ -19,19 +20,27 @@ function NavItem({ to, label }) {
   );
 }
 
-function Dropdown({ to, label, items }) {
+function Dropdown({ label, items }) {
   return (
     <div className="dropdown">
-      <NavLink
-        to={to}
-        className={({ isActive }) => `nav2__item ${isActive ? "is-active" : ""}`}
+      {/* ===== NOT A LINK ANYMORE ===== */}
+      <button
+        type="button"
+        className="nav2__item nav2__item--static"
+        aria-haspopup="menu"
+        aria-label={label}
+        onClick={(e) => {
+          // NOTE: ei tehdä mitään klikkauksella
+          // (alasveto toimii hoverilla CSS:llä kuten ennen)
+          e.preventDefault();
+        }}
       >
         {label} <span className="caret">▾</span>
-      </NavLink>
+      </button>
 
-      <div className="dropdown__menu">
+      <div className="dropdown__menu" role="menu">
         {items.map((it) => (
-          <Link key={it.to} className="dropdown__link" to={it.to}>
+          <Link key={it.to} className="dropdown__link" to={it.to} role="menuitem">
             {it.label}
             <span style={{ opacity: 0.65 }}>→</span>
           </Link>
@@ -46,7 +55,6 @@ export default function Header({ theme, onToggleTheme }) {
   // ===== BUILD DROPDOWN ITEMS ONCE =====
   // ============================================================
   const dropdownItemsByCategory = useMemo(() => {
-    // group by category
     const map = new Map();
 
     for (const p of PROJECTS) {
@@ -55,17 +63,13 @@ export default function Header({ theme, onToggleTheme }) {
       map.get(cat).push(p);
     }
 
-    // sort alphabetically by title
     for (const [cat, arr] of map.entries()) {
       arr.sort((a, b) => a.title.localeCompare(b.title));
       map.set(cat, arr);
     }
 
-    // convert to link items
-    // convert to link items
     const toItems = (category) => {
       const projects = map.get(category) || [];
-
       return projects.map((p) => ({
         label: p.title,
         to: `/projects/${slugify(p.title)}`,
@@ -92,20 +96,9 @@ export default function Header({ theme, onToggleTheme }) {
         <nav className="nav2">
           {NAV.map((n) => {
             if (n.type === "dropdown") {
-              const items = dropdownItemsByCategory[n.category] ?? [
-                { label: "All", to: n.to },
-              ];
-
-              return (
-                <Dropdown
-                  key={n.label}
-                  to={n.to}
-                  label={n.label}
-                  items={items}
-                />
-              );
+              const items = dropdownItemsByCategory[n.category] ?? [];
+              return <Dropdown key={n.label} label={n.label} items={items} />;
             }
-
             return <NavItem key={n.label} to={n.to} label={n.label} />;
           })}
         </nav>
