@@ -9,6 +9,7 @@ import heroBgUrl from "../assets/hero-bg.jpg";
 import ce1 from "../assets/projects/caffeine/1.jpg";
 import ce2 from "../assets/projects/caffeine/2.jpg";
 import ce3 from "../assets/projects/caffeine/3.jpg";
+import ce4 from "../assets/projects/caffeine/4.jpg";
 
 import tempImg from "../assets/tempImg.jpg";
 
@@ -77,6 +78,7 @@ export const PROJECTS = [
       { src: ce1, alt: "CaffeineEngine screenshot 1" },
       { src: ce2, alt: "CaffeineEngine screenshot 2" },
       { src: ce3, alt: "CaffeineEngine screenshot 3" },
+      { src: ce4, alt: "CaffeineEngine screenshot 4" },
     ],
     tags: ["C++", "OpenGL", "Vulkan", "Engine", "CMake", "Box2D", "MiniAudio"],
     links: [{ label: "Repo", href: "https://github.com/Samul1" }], // TODO
